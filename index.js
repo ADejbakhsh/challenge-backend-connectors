@@ -12,39 +12,12 @@ const bankin_auth = new BasicAuth(clientId, clientSecret, login, password, "http
 const  refresh_token = bankin_auth.authenticate({"Content-Type": "application/json"}, "/login")
 
 //TODO Adejbakh trouver meilleur nom de variable ou meilleur methode
-const resolved = await Promise.resolve(refresh_token)
+const resolved_RT = await Promise.resolve(refresh_token)
+const accessToken = bankin_auth.getAccessToken({"content-type": "application/x-www-form-urlencoded"}, "/token", resolved_RT.refresh_token)
 
-const accessToken = bankin_auth.getAccessToken({"content-type": "application/x-www-form-urlencoded"}, "/token", resolved.refresh_token)
+const resolved_AT = await Promise.resolve(accessToken)
+const accounts = bankin_auth.getAllAccount({"Content-Type": "application/json"}, "/accounts", resolved_AT.access_token)
 
-accessToken.then(function (response) {
-    console.log("access_token", response.access_token)
-})
-
-
-
-
-
-
-//Authenticate to the API to retrieve an access token
-
-// axios.post(`http://localhost:3000/login`,{
-//     "user": login,
-//     "password": password
-// } , {
-//     headers: {
-//         'Content-Type': 'application/json',
-//         'Accept': 'application/json',
-//     },
-//     auth: {
-//         username: clientId,
-//         password: clientSecret
-//     }
-    
-// }).then(function (response) {
-//     console.log(response);
-//     // je recupere le token
-// }).catch(function (error) {
-//     console.log(error);
-// });
-
+const resolved_accounts = await Promise.resolve(accounts)
+// ici il faut mettre MaxAccountPage_naif a jour dans la DB
 
