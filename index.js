@@ -7,18 +7,19 @@ const clientSecret = "secret"
 
 
 const headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    }
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+}
 
 
-const bankin_auth = new BasicAuth(clientId, clientSecret, login, password, "http://localhost:3000");
+const bankin_auth = new BasicAuth(clientId, clientSecret, login, password, "http://localhost:3000")
 
-const refresh_token = bankin_auth.authenticate(headers, "/login")
+const  refresh_token = bankin_auth.authenticate(headers, "/login")
 
-refresh_token.then(function (response) {
-    console.log(response);
-})
+// a equal resolver refresh token 
+const resolved_resfresh_token = Promise.resolve(refresh_token)
+
+
 
 //Authenticate to the API to retrieve an access token
 
