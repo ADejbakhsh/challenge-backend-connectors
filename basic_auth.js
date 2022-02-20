@@ -1,7 +1,7 @@
 import axios from "axios"
 
 //Used for URL-Encoding Bodies (x_www_form_urlencoded) recommended here https://axios-http.com/docs/urlencoded
-import qs from "qs"
+//import qs from "qs"
 
 
 // Cette classe par du principe que tout les basic auth sont identique
@@ -17,7 +17,7 @@ class BasicAuth {
 
     // Authenticate to retrieve the refresh token
     async authenticate(custome_headers, URL_path) {
-        const refresh_token = new Promise((resolve, reject) => {
+        const refresh_token = new Promise((resolve, reject) => {            
             axios.post(this.baseUrl + URL_path, {
                 "user": this.login,
                 "password": this.password
@@ -32,7 +32,8 @@ class BasicAuth {
             }).catch(function (error) {
                 reject(error)
                 // should be in a managed log so we can easily see if it's a 404 or 401
-                console.log("❌ authenticate error : unable to get refresh token",)
+                console.log("❌ authenticate error : unable to get refresh token")
+                throw error
             })
         }
         )
@@ -53,7 +54,8 @@ class BasicAuth {
             ).catch(function (error) {
                 reject(error)
                 // should be in a managed log so we can easily see if it's a 404 or 401
-                console.log("❌ getAccessToken error : unable to get access token",)
+                console.log("❌ getAccessToken error : unable to get access token")
+                throw error
             }
             )
         })
