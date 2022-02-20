@@ -1,19 +1,23 @@
 import basic_auth from "./basic_auth.js"
 
 
-// retrieve the accounts                  URL path est voudou 
+
+
+async function clean_accounts_object(accounts, length) {
+    
+    while(accounts[length-2].link.next === null) {
+        delete accounts[length-1]
+        length--
+    }
+    return accounts
+}
+
+// retrieve the accounts
 async function getAllAccount(bankin_auth_data, URL_path, access_token) {
     const header = {"Content-Type": "application/json"}
     
-    // nul a chier j'ai pas trouver comment passer la réference de mon objet de class initial 😒
-    const clientId = bankin_auth_data.clientId
-    const clientSecret = bankin_auth_data.clientSecret
-    const login = bankin_auth_data.login
-    const password = bankin_auth_data.password
 
-    const bankin_auth = new basic_auth(clientId, clientSecret, login, password, bankin_auth_data.baseUrl)
-
- 
+    const bankin_auth = new basic_auth(null, null, null, null, bankin_auth_data.baseUrl)
 
     //Combien de page je vais fetch avant de resolve la promesse
     // Pour eviter de de fetch des page qui n'existe pas.
@@ -37,16 +41,7 @@ async function getAllAccount(bankin_auth_data, URL_path, access_token) {
     return resolved_AC
 }
 
+// async function GetAllTransaction
 
-
-
-async function clean_accounts_object(accounts, length) {
-
-    while(accounts[length-2].link.next === null) {
-        delete accounts[length-1]
-        length--
-    }
-    return accounts
-}
 
 export {clean_accounts_object, getAllAccount}
