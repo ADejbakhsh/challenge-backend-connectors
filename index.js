@@ -23,7 +23,9 @@ const accounts = getAllAccount(bankin_auth, "/accounts", resolved_AT.access_toke
 const resolved_accounts = await Promise.resolve(accounts)
 // ici il faut mettre MaxAccountPage_naif a jour dans la DB
 
+
 //Enleve les potentiel entrées en trop
 const clean_account_P = clean_accounts_object(resolved_accounts, resolved_accounts.length)
+
 
 console.log(await clean_account_P)
