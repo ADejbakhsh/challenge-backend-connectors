@@ -29,3 +29,5 @@ const clean_account_P = clean_accounts_object(resolved_accounts, resolved_accoun
 
 
 console.log(await clean_account_P)
+
+// getAllTransactionByAccounts(bankin_auth, "/accounts", resolved_AT.access_token, await clean_account_P)

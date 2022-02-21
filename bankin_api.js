@@ -21,6 +21,11 @@ async function clean_accounts_object(accounts, length) {
     //remove currency from all object
     for (let index = 0; index < clean_accounts.length; index++) {
         delete clean_accounts[index]?.currency
+
+        // the api require that all number have same 9char length even if it doesn't give it as such (╯‵□′)╯︵┻━┻
+        const acc_int = Number(clean_accounts[index].acc_number)
+        const padding = 10 - acc_int.toString().length
+        clean_accounts[index].acc_number = acc_int.toString().padStart(padding, "0")
     }
 
     return clean_accounts
@@ -48,26 +53,47 @@ async function getAllAccount(bankin_auth_data, URL_path, access_token) {
 
             accounts = []
             //erreur tactic il fallait check si les compte était déjà present ou pas.
-            if (resolved_AC[current_page].link.next !== null)
+            if (resolved_AC[current_page].link && resolved_AC[current_page].link.next !== null)
                 MaxAccountPage_naif += 10 //  pas ouf mais pas de meilleur idée 
         }
         current_page++
     }
     // remove first result as it just links -> potential future bug
     delete resolved_AC[0]
-    
+
     return resolved_AC
 }
+/*
+async function getAllTransactionByAccounts(bankin_auth_data, URL_path, access_token, accounts) {
+    const header = {"Content-Type": "application/json"}
+    const bankin_auth = new basic_auth(null, null, null, null, bankin_auth_data.baseUrl)
 
-// async function GetAllTransactionByAccounts(bankin_auth_data, URL_path, access_token, accounts) {
-//     const header = {"Content-Type": "application/json"}
-//     const bankin_auth = new basic_auth(null, null, null, null, bankin_auth_data.baseUrl)
-
-//     for (let index = 0; index < accounts.length; index++) {
-//         const element = accounts[index]
+    let promise_array = []
+    for (let index = 0; index < accounts.length; index++) {
+        const acc_number = accounts[index].acc_number
+        try{
+            promise_array.push({
+                "transac" : bankin_auth.AuthorizationBearerRequest(
+                    header,
+                    `${URL_path}/${acc_number}/transactions`,
+                    access_token).then(console.log).catch(console.log),
+                "acc_number": acc_number})
+        } catch(e) {
+            //console.log(e)
+        }
         
-//     }
-// }
+    }
+    
+    // // find accounts by acc_number
+    // let resolved_transac = []
+    // try{
+    //     resolved_transac  = await Promise.all(promise_array)
+    // } catch (error) {
+    //     console.log("unable to resolve")
+    // }
+    // console.log(resolved_transac)
+
+}*/
 
 
 export {clean_accounts_object, getAllAccount}
